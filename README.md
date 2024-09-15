@@ -316,15 +316,21 @@ Professional summary updated and the continuous integration pipeline executed.<p
 ![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/4dc4470e-0e14-4d0d-b0b0-dc5a10ba0da6)<p>
 ![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/506a99a8-0e22-4824-a36f-b6352cb07045)<p>
 
-Image pushed to my repo in Docker Hub regisry.<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/11a6626d-eb5d-4a14-94c3-55df324ac6e6)<p>
+Image buitlt and pushed to my repo in Docker Hub regisry.<p>
+![alt text](images/image-dh2.png)<p>
+![alt text](images/image-dh.png)<p>
 
 Run image and view in the browser to confirm the update. <p> 
+
 ```
-docker run -d -p 82:80 --name UpdatedPortfolioapp kwameds/portfolio_webapp:1.2.0
+docker run -d -p 81:80 --name docker-portfolio-v2 kwameds/containerise-my-docker-developer-portfolio:1.0.1
 ```
 Image pulled and container created:<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/78b800df-d501-43da-80bf-c720b70f2a04)<p>
+> Output:
+>
+```bash
+
+```
 
 The web application is accessible with `update`:<p>
 ![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/d4805328-2c66-480b-9c3c-1ae90664ecc1)<p>
