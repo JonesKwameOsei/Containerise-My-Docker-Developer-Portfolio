@@ -161,6 +161,7 @@ In a `traditional build` (as I did above), *all build instructions are executed 
 Multi-stage builds introduce multiple stages in the Dockerfile, each with a specific purpose. By separating the build environment from the final runtime environment, it can significantly reduce the image size and attack surface. This is especially beneficial for applications with large build dependencies.
 
 Creating a multi-stage Dockerfile:<p>
+
 ```bash
 # Stage 1: Production Stage
 FROM nginx:alpine AS build
