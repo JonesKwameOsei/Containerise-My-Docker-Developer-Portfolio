@@ -330,15 +330,92 @@ Image pulled and container created:<p>
 > Output:
 >
 ```bash
-
+Unable to find image 'kwameds/containerise-my-docker-developer-portfolio:1.0.1' locally
+1.0.1: Pulling from kwameds/containerise-my-docker-developer-portfolio
+55d1fadea6f0: Download complete 
+8f73dee2ed94: Download complete 
+49c086b1b359: Download complete 
+2c522fc6a72a: Download complete 
+391b737b5c60: Download complete 
+9bde6af733d4: Download complete 
+Digest: sha256:be3fbfbd47c92a000000000000000000000000000xxxxxxxxxxxxxxxxx
+Status: Downloaded newer image for kwameds/containerise-my-docker-developer-portfolio:1.0.1
 ```
 
-The web application is accessible with `update`:<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/d4805328-2c66-480b-9c3c-1ae90664ecc1)<p>
+The web application is accessible with `updated` icons:<p>
+![alt text](port-web2.png)<p>
 
+### Deploy Portfolio Web Application with SSL Certificate
+Throughout this project, I have been accessing the app on the web via http. This is not secured and to enhance its security, I will route traffic to the web with SSL certificate by utilising `Traefik proxy`. I have already set up [traefik](https://github.com/JonesKwameOsei/Implementing-Traffic-Proxy-and-Docker-UI-for-Servers-Using-Docker-Swarm). I will deploy a service and use traefik to route traffic to the portfolio app. <p>
+
+1. Create a Service for the Web Application <p>
+```bash
+# portfolio.yml (Portfolio Service Configuration)
+
+services:
+  portfolio:
+    image: kwameds/containerise-my-docker-developer-portfolio:1.0.1
+    networks:
+      - traefik-proxy
+    deploy:
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.portfolio.rule=Host(`d.portfolio.jonestecsolutions.com`)'
+        - 'traefik.http.services.portfolio.loadbalancer.server.port=80'
+        - 'traefik.http.routers.portfolio.entrypoints=websecure'
+        - 'traefik.http.routers.portfolio.tls=true'
+        - 'traefik.http.routers.portfolio.tls.certresolver=leresolver'
+
+networks:
+  traefik-proxy:
+    external: true
+```
+2. Deploy the Service<p>
+```bash
+docker stack deploy -c portfolio.yml porfolio
+```
+> Output:
+>
+```
+Creating service porfolio_portfolio
+```
+
+3. List deployed services <p>
+```bash
+docker stack ls
+```
+>
+> Output:
+>
+```
+NAME        SERVICES
+porfolio    1
+portainer   2
+traefik     2
+```
+
+4. List Services <p>
+```bsh
+docker service ls
+```
+>
+> Output:
+>
+```
+ID             NAME                  MODE         REPLICAS   IMAGE                                                      PORTS
+z6i5l6ci3nmd   porfolio_portfolio    replicated   1/1        kwameds/containerise-my-docker-developer-portfolio:1.0.1   
+bacvihpph58i   portainer_agent       global       1/1        portainer/agent:latest                                     
+94o7uqvp6g31   portainer_portainer   replicated   1/1        portainer/portainer:latest                                 
+xf49h136wmlr   traefik_my-app        replicated   1/1        containous/whoami:v1.3.0                                   
+biw5fjafclmn   traefik_traefik       replicated   1/1        traefik:v2.1.4                                             *:80->80/tcp, *:443->443/tcp
+```
+
+5. **Access the Web Application**<p>
+The application can be accessed on `d.portfolio.jonestecsolutions.com`.<p> 
+![alt text](port-web4.png)<p>
+![alt text](port-web3.png)<p>
+![alt text](port-web.png)<p>
 
 ## Conclusion
-I have successfully integrated Docker into a development pipeline using `GitHub Actions`. This method enables automated build and push Docker images to a registry, ensuring that deployments are consistent and always reflect the latest code changes. This setup offers a dependable and effective way to handle Docker-based applications.
+I have successfully developed my Portfolip Web Application and hosted it on the cloud. I integrated web app development into a pipeline using `GitHub Actions`. This method enables automated build and push Docker images to a registry, ensuring that deployments are consistent and always reflect the latest code changes. This setup offers a dependable and effective way to handle Docker-based applications. The application was deployed and encrypted with SSL cerficate using Traefik Proxy to route traffic to the web app. 
 
-## What is Next?
-Having completed the builds, I will deploy these dockerised applications (CV and Portfolio web apps) with `K8s`. 
