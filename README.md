@@ -254,42 +254,63 @@ git commit -m "Added configuration files"
 ```
 git push origin main
 ```
-Commit and push the changes to the `main` branch of your GitHub repository. This will trigger the `actions.yml` workflow, which will automatically build and push your Docker image to the GitHub Container Registry. In the `Actions` tab of the GitHub repository, we can monitor the progress and check the status of the workflow run.<p>
 
 The pipeline actions has been executed:<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/f7800154-04cc-47db-8199-8e32c1e436f5)<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/774cf5a0-c38b-4825-9994-794aa7756ea7)<p>
+![alt text](images/pipeline1.png)<p>
+![alt text](images/pipeline2.png)<p>
 
-GitHub action completed. We will confirm if the the image is in the `Docker Hub` registry. 
+GitHub action completed. I will confirm if the the image is in the `Docker Hub` registry. 
 Image in docker hub.<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/eda93fcc-321a-4b01-80c7-b4f7faf45a19)<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/dddf2fb6-5888-4877-8b8d-77965917e5be)<p>
-
+![dockerhub](images/dockerhub.png)<p>
+![alt text](images/dockerhub2.png)<p>
 
 ### Test the New Image
 Having automatically build and pushed the image to Docker Hub, it is important to run the application to verify if it is working. Run:
 ```
-docker run -d -p 81:80 --name newPortfolioapp kwameds/portfolio_webapp:1.1.0
+docker run -d -p 80:80 --name docker-portfolioapp kwameds/containerise-my-docker-developer-portfolio:1.0.0
 ```
-Docker pulled the image from my repo in the Docker Hub registry as it couldn't find the image locally. Docker goes ahead to run a container based on that image. The `-d` option runs the container in detached mode, `-p 8081:8080` maps the `host's port 81` to the `container's port 80`, and `--name newPortfolioapp` assigns the name **newCVapp** to the container.<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/6f73087a-bd34-4b33-904c-2c1ee6404c4c)<p>
+Docker pulled the image from my repo in the Docker Hub registry as it couldn't find the image locally. Docker goes ahead to run a container based on that image. The `-d` option runs the container in detached mode, `-p 80:80` maps the `host's port 80` to the `container's port 80`, and `--name docker-portfolioapp` assigns the name **newCVapp** to the container.<p>
 
-Let us confirm if the image is now in our local registry by running:
+> Output:
+>
+```sh
+Unable to find image 'kwameds/containerise-my-docker-developer-portfolio:1.0.0' locally
+1.0.0: Pulling from kwameds/containerise-my-docker-developer-portfolio
+55c8710017d5: Download complete 
+2bb9fc0820a2: Download complete 
+22305e29ea1b: Download complete 
+6dfc83f8bf4e: Download complete 
+3d61522191bb: Download complete 
+Digest: sha256:15f34428135a7c1a1c8dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Status: Downloaded newer image for kwameds/containerise-my-docker-developer-portfolio:1.0.0
 ```
-docker images        # lists all images
-docker ps            # lists containers running
-```
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/13f8cb74-a05c-4be2-a7d8-cff6c75adb04)<p>
 
-Next, We will view the web app in the browser by typing: `http://localhost:8081`. <p>
+Let us confirm if the image is now in our local registry by running:<p>
+```bash
+docker image ls                <============= lists all images
+docker container ls            <============= lists containers running
+```
+> Output for image list
+>
+```sh
+REPOSITORY                                           TAG       IMAGE ID       CREATED          SIZE
+kwameds/containerise-my-docker-developer-portfolio   1.0.0     15f34428135a   19 minutes ago   99.6MB       <=================  image pulled from Dockerhub
+kwameds/docker-portfolio                             v2        54c29eb65c61   2 hours ago      95.6MB
+kwameds/docker-portfolio                             v1        cd868306f361   3 hours ago      99.9MB
+```
+
+> Output for image list
+>
+```sh
+CONTAINER ID   IMAGE                                                      COMMAND                  CREATED         STATUS         PORTS                            NAMES
+871dc8c288f9   kwameds/containerise-my-docker-developer-portfolio:1.0.0   "/docker-entrypoint.…"   4 minutes ago   Up 4 minutes   0.0.0.0:80->80/tcp               docker-portfolioapp
+```
+**Access the Portfolio on the browser**
+Next, We will view the web app in the browser by typing: `http://localhost:80`. <p>
 The web page is accessible: <p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/2413cf0b-334a-44e6-a96c-d148daeb90ad)<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/2e5cfc1f-4f34-418e-8bcb-9e2d45401cea)<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/0029ba03-98ae-4598-ab05-273163f495bc)<p>
-![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/6078e7ef-b9eb-45f8-bb8b-968baf013578)
+![image](images/docker-portfolio-web.png)<p>
 
-### Modify the codebase and Apply Continous Integration to Build and Push Updates
-I will change the **professional summary** under `Intro` from: "A DevOps Engineer proficient in Linux, Git & Github, Jenkins, Python, Bash scripting, Terraform, Kubernetes, Docker, Ansible, AWS, Azure and more...", To: "An experienced DevOps Engineer proficient in Linux, Git & Github, Jenkins, Python, Bash scripting, Terraform, Kubernetes, Docker, Ansible, AWS, Azure and more...". Here, I have updated the app version to V1.2.0. 
+The Portfolio can be accessed but there are some icons (circled in green that are defective). I will correct this error and build the app again as version 1.0.1.  
 
 Professional summary updated and the continuous integration pipeline executed.<p>
 ![image](https://github.com/JonesKwameOsei/Dockerise-Build-Push-Deploy-with-CI-CD/assets/81886509/4dc4470e-0e14-4d0d-b0b0-dc5a10ba0da6)<p>
