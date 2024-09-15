@@ -127,7 +127,6 @@ I can verify from on Docker CLI if the image is actually built. To do this, run:
 docker image ls
 ```
 > Output:
->
 
 ```
 REPOSITORY                         TAG       IMAGE ID       CREATED          SIZE
