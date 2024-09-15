@@ -210,7 +210,7 @@ Having tested the build and run locally, I will automate the build and also push
 
 1. Set up workflows. 
 ```bash
-# Name of the Pipeline
+# Name of the Pipeline Actions
 name: Build and Push Docker Image CI
 
 on:
