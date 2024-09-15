@@ -30,4 +30,4 @@ jobs:
           platforms: linux/amd64,linux/arm64/v8
           context: .
           push: true
-          tags: ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:1.0.0
+          tags: ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:1.0.1
